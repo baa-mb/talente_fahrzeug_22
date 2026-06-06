@@ -1,4 +1,5 @@
 radio.onReceivedValue(function (info, wert) {
+    music.play(music.tonePlayable(523, music.beat(BeatFraction.Whole)), music.PlaybackMode.UntilDone)
     if (info == "kurve") {
         kurve_get = wert
         kurve_rad = Math.round(Math.map(kurve_get, -45, 45, -255, 255))
@@ -9,7 +10,7 @@ radio.onReceivedValue(function (info, wert) {
         if (wert == 0) {
             robotbit.Servo(robotbit.Servos.S1, 0)
         } else {
-            robotbit.Servo(robotbit.Servos.S1, heben_winkel)
+            robotbit.Servo(robotbit.Servos.S1, hebe_winkel)
         }
     }
 })
@@ -23,8 +24,8 @@ let gerade_rad = 0
 let gerade_get = 0
 let kurve_rad = 0
 let kurve_get = 0
-let heben_winkel = 0
-heben_winkel = 70
+let hebe_winkel = 0
+hebe_winkel = 70
 let lauf_flag = 0
 let links_rad = 0
 let rechts_rad = 0
