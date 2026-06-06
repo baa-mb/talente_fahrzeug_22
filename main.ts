@@ -14,24 +14,33 @@ radio.onReceivedValue(function (info, wert) {
         }
     }
 })
+input.onButtonPressed(Button.B, function () {
+    if (oben) {
+        robotbit.Servo(robotbit.Servos.S1, 0)
+    } else {
+        robotbit.Servo(robotbit.Servos.S1, hebe_winkel)
+    }
+    oben = !(oben)
+})
 let rechts_soll = 0
 let links_soll = 0
 let kurve_rechts = 0
 let kurve_links = 0
 let gerade_rechts = 0
 let gerade_links = 0
+let oben = false
 let gerade_rad = 0
 let gerade_get = 0
 let kurve_rad = 0
 let kurve_get = 0
 let hebe_winkel = 0
-hebe_winkel = 70
 let lauf_flag = 0
 let links_rad = 0
 let rechts_rad = 0
 let links_ist = 0
 let rechts_ist = 0
 radio.setGroup(26)
+hebe_winkel = 70
 basic.showIcon(IconNames.Diamond)
 let motor_links = robotbit.Motors.M1A
 let motor_rechts = robotbit.Motors.M2A
