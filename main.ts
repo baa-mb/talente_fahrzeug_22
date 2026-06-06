@@ -19,47 +19,63 @@ radio.onReceivedValue(function (info, wert) {
     if (info == "kurve") {
         kurve_get = wert
         kurve_rad = Math.round(Math.map(kurve_get, -45, 45, -255, 255))
-
     } else if (info == "gerade") {
         gerade_get = wert
         gerade_rad = Math.round(Math.map(gerade_get, -45, 45, -255, 255))
     }
 })
+input.onButtonPressed(Button.AB, function () {
+    for (let index = 0; index < 4; index++) {
+        robotbit.Servo(robotbit.Servos.S1, 0)
+        robotbit.Servo(robotbit.Servos.S2, 0)
+        basic.pause(1000)
+        robotbit.Servo(robotbit.Servos.S1, 60)
+        robotbit.Servo(robotbit.Servos.S2, 180)
+        basic.pause(2000)
+    }
+})
 input.onButtonPressed(Button.B, function () {
     lauf_flag = 0
 })
-
-let gerade_get = 0, gerade_rad = 0, gerade_rechts = 0, gerade_links = 0
-let kurve_get = 0, kurve_rad = 0, kurve_rechts = 0, kurve_links = 0
-let links_rad = 0, rechts_rad = 0
+let rechts_soll = 0
+let links_soll = 0
+let kurve_rechts = 0
+let kurve_links = 0
+let gerade_rechts = 0
+let gerade_links = 0
+let gerade_rad = 0
+let kurve_rad = 0
+let kurve_get = 0
+let gerade_get = 0
+let lauf_flag = 0
+let links_rad = 0
+let rechts_rad = 0
 let links_ist = 0
 let rechts_ist = 0
-let links_soll = 0
-let rechts_soll = 0
-let lauf_flag = 0
 radio.setGroup(26)
 lauf_flag = 0
 basic.showIcon(IconNames.Diamond)
 let motor_links = robotbit.Motors.M1A
 let motor_rechts = robotbit.Motors.M2A
 robotbit.MotorStopAll()
+let strip = neopixel.create(DigitalPin.P16, 4, NeoPixelMode.RGB)
+strip.showRainbow(1, 360)
 basic.forever(function () {
     gerade_links = gerade_rad * 1.2
     gerade_rechts = gerade_rad
     kurve_links = kurve_rad * -1
     kurve_rechts = kurve_rad
-
     // if (links_soll > 255) {
-    //     links_soll = 255
+    // links_soll = 255
     // } else if (links_soll < -255) {
-    //     links_soll = -255
+    // links_soll = -255
     // }
     links_soll = Math.min(Math.max(gerade_links + kurve_links, -255), 255)
     rechts_soll = Math.min(Math.max(gerade_rechts + kurve_rechts, -255), 255)
     // if (rechts_soll > 255) {
-    //     rechts_soll = 255
+    // rechts_soll = 255
     // } else if (rechts_soll < -255) {
-    //     rechts_soll = -255
+    // rechts_soll = -255
     // }
     if (links_ist < links_soll) {
         links_ist = Math.min(links_ist + 12, links_soll)
@@ -75,9 +91,15 @@ basic.forever(function () {
         robotbit.MotorStopAll()
     } else {
         robotbit.MotorRun(motor_links, links_ist)
-        robotbit.MotorRun(motor_rechts, rechts_ist)
+robotbit.MotorRun(motor_rechts, rechts_ist)
     }
     // serial.writeLine("links: " + motor_links + " rechts_ist: " + rechts_ist)
-
     basic.pause(10)
+})
+control.inBackground(function () {
+    while (true) {
+        strip.rotate(1)
+        strip.show()
+        basic.pause(1500)
+    }
 })
